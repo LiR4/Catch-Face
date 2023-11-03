@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from deepface import DeepFace
+import os
 
 class VideoCommand:
     def __init__(self, config:ConfigHandler):
@@ -11,9 +12,12 @@ class VideoCommand:
         self.config = config
         self.results = []
         self.last_time = []
+        self.results = []
         self.time_start = 0.0
         self.time_end = 0.0
         self.count = 0
+        self.path_cut = config.get_path_cut()
+        self.path_compare = config.get_path_comp()
 
 
     def cut(self,video_file, time_start, time_end, count, second):
@@ -49,3 +53,24 @@ class VideoCommand:
             # cv2.imshow("teste",img)
             if sucess != True:
                 break
+
+    def catch_face(self, file, compare):
+        video = cv2.VideoCapture(file)
+        if(video.isOpened):
+            while True:
+                state, frames = video.read()
+                if(state):
+                    cv2.imwrite('./shared/data/test/teste.jpg', frames)
+                    dfs = DeepFace.find(img_path = './shared/data/test/teste.jpg', db_path = compare, enforce_detection=False)
+                    if(len(dfs[0])!=0):
+                        self.results.append(file)
+                        break
+                else:
+                    break
+
+    def clips_have_face(self):
+        for file in os.listdir(self.path_cut):
+            print("--------\n",self.path_cut+'\\'+file,"\n--------")
+            self.catch_face(self.path_cut+'\\'+file,self.path_compare)
+
+        print(self.results)

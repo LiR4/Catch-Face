@@ -11,6 +11,7 @@ class DirCommand:
         path_data = self.config.get_path_data()
         path_cut = self.config.get_path_cut()
         path_test =  self.config.get_path_test()
+        path_compare = self.config.get_path_comp()
 
         if(os.path.isdir(path_data) == False):
             clip = os.path.join('shared', 'data')
@@ -24,7 +25,7 @@ class DirCommand:
             clip = os.path.join(path_data, 'test')
             os.makedirs(clip)
 
-        if(os.path.isdir(path_test) == False):
+        if(os.path.isdir(path_compare) == False):
             clip = os.path.join(path_test, 'compare')
             os.makedirs(clip)
         
