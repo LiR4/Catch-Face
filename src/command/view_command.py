@@ -6,8 +6,8 @@ class AppCommand:
 
     def video_file(self):
         filename = customtkinter.filedialog.askopenfile()
-        print(filename.name)
+        return filename.name
 
     def compare_dir(self):
         filename = customtkinter.filedialog.askdirectory()
-        print(filename)
+        return filename

@@ -1,4 +1,5 @@
 from src.handler.config_handler import ConfigHandler
+from src.command.view_command import AppCommand
 
 import cv2
 import numpy as np
@@ -7,7 +8,7 @@ from deepface import DeepFace
 import os
 
 class VideoCommand:
-    def __init__(self, config:ConfigHandler):
+    def __init__(self, config:ConfigHandler, app:AppCommand):
 
         self.config = config
         self.results = []
@@ -17,16 +18,17 @@ class VideoCommand:
         self.time_end = 0.0
         self.count = 0
         self.path_cut = config.get_path_cut()
-        self.path_compare = config.get_path_comp()
+        self.path_compare = app.compare_dir()
+        self.path_video = app.video_file()
 
 
     def cut(self,video_file, time_start, time_end, count, second):
         ffmpeg_extract_subclip(video_file, time_start, time_end+second, targetname=self.config.get_path_cut()+f'\cut{count}.mp4')
 
 
-    def get_faces_on_video(self, video_file, seconds=3):
+    def get_faces_on_video(self, seconds=3):
 
-        video = cv2.VideoCapture(video_file)
+        video = cv2.VideoCapture(self.path_video)
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
         while True:
@@ -42,7 +44,7 @@ class VideoCommand:
             
             if(self.time_start != 0.0 and self.time_end != 0.0): # cut section
                 if(self.last_time[self.count]+1 < self.time_start):
-                    self.cut(video_file, self.time_start, self.time_end, self.count, seconds)
+                    self.cut(self.path_video, self.time_start, self.time_end, self.count, seconds)
                     print(f"time start: {self.time_start}, time end: {self.time_end+seconds}")
                     self.count += 1
 
@@ -53,6 +55,8 @@ class VideoCommand:
             # cv2.imshow("teste",img)
             if sucess != True:
                 break
+
+        self.clips_have_face()
 
     def catch_face(self, file, compare):
         video = cv2.VideoCapture(file)

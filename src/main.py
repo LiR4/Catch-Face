@@ -4,25 +4,22 @@ from src.command.video_command import VideoCommand
 from src.command.view_command import AppCommand
 from src.view.app import App
 
+
+config = ConfigHandler()
+
+directory = DirCommand(config)
+
 app_command = AppCommand()
 
-view = App(app_command)
+video = VideoCommand(config, app_command)
+
+directory.create_path()
+
+view = App(app_command, video)
 
 view.home()
 
-# video_file = r'shared\data\20231014_094039.mp4'
-
-# config = ConfigHandler()
-
-# directory = DirCommand(config)
-
-# video = VideoCommand(config)
-
-# directory.create_path()
-
-# video.get_faces_on_video(video_file)
-
-# #you need to chage a foto in directory shared\data\test\compare
-# print(video.clips_have_face())
+#you need to chage a foto in directory shared\data\test\compare
+print(video.clips_have_face())
 
 
