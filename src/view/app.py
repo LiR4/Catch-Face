@@ -22,12 +22,9 @@ class App:
         def start():
             self.video.get_faces_on_video()
 
+
         # Use CTkButton instead of tkinter Button
-        button1 = customtkinter.CTkButton(master=app, text="File", command=self.command.video_file)
-        button2 = customtkinter.CTkButton(master=app, text="Directory", command=self.command.compare_dir)
-        button3 = customtkinter.CTkButton(master=app, text="Start", command=start)
-        button1.place(relx=0.25, rely=0.5, anchor=customtkinter.CENTER)
-        button2.place(relx=0.7, rely=0.5, anchor=customtkinter.CENTER)
-        button3.place(relx=0.3, rely=0.1, anchor=customtkinter.CENTER)
+        button1 = customtkinter.CTkButton(master=app, text="Start", command=start)
+        button1.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
         app.mainloop()

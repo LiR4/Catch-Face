@@ -11,6 +11,7 @@ class VideoCommand:
     def __init__(self, config:ConfigHandler, app:AppCommand):
 
         self.config = config
+        self.app = app
         self.results = []
         self.last_time = []
         self.results = []
@@ -18,8 +19,6 @@ class VideoCommand:
         self.time_end = 0.0
         self.count = 0
         self.path_cut = config.get_path_cut()
-        self.path_compare = app.compare_dir()
-        self.path_video = app.video_file()
 
 
     def cut(self,video_file, time_start, time_end, count, second):
@@ -28,7 +27,9 @@ class VideoCommand:
 
     def get_faces_on_video(self, seconds=3):
 
-        video = cv2.VideoCapture(self.path_video)
+        video_path = self.app.video_file()
+
+        video = cv2.VideoCapture(video_path)
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
         while True:
@@ -44,7 +45,7 @@ class VideoCommand:
             
             if(self.time_start != 0.0 and self.time_end != 0.0): # cut section
                 if(self.last_time[self.count]+1 < self.time_start):
-                    self.cut(self.path_video, self.time_start, self.time_end, self.count, seconds)
+                    self.cut(video_path, self.time_start, self.time_end, self.count, seconds)
                     print(f"time start: {self.time_start}, time end: {self.time_end+seconds}")
                     self.count += 1
 
@@ -73,8 +74,9 @@ class VideoCommand:
                     break
 
     def clips_have_face(self):
+        compare_dir = self.app.compare_dir()
         for file in os.listdir(self.path_cut):
             print("--------\n",self.path_cut+'\\'+file,"\n--------")
-            self.catch_face(self.path_cut+'\\'+file,self.path_compare)
+            self.catch_face(self.path_cut+'\\'+file, compare_dir)
 
-        print(self.results)
+        return self.results

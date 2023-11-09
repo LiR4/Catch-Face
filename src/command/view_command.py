@@ -1,3 +1,4 @@
+import cv2
 import customtkinter
 
 class AppCommand:
@@ -11,3 +12,15 @@ class AppCommand:
     def compare_dir(self):
         filename = customtkinter.filedialog.askdirectory()
         return filename
+    
+    def play_video(self, path):
+        cap = cv2.VideoCapture(path)
+        while True:
+            ret, frame = cap.read()
+            cv2.imshow('frame', frame)
+            
+            if ret != True:
+                cap.release()
+                cv2.destroyAllWindows
+                break
+

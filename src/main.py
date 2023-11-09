@@ -20,6 +20,6 @@ view = App(app_command, video)
 view.home()
 
 #you need to chage a foto in directory shared\data\test\compare
-print(video.clips_have_face())
+# print(video.clips_have_face())
 
 
