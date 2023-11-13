@@ -19,6 +19,7 @@ class VideoCommand:
         self.time_end = 0.0
         self.count = 0
         self.path_cut = config.get_path_cut()
+        self.exe = []
 
 
     def cut(self,video_file, time_start, time_end, count, second):
@@ -73,21 +74,19 @@ class VideoCommand:
                         break
                 else:
                     break
+        os.system('cls')
+        print('!!!!!!!Finish!!!!!!')
 
     def clips_have_face(self):
         compare_dir = self.app.compare_dir()
         for file in os.listdir(self.path_cut):
             print("--------\n",self.path_cut+'\\'+file,"\n--------")
             self.catch_face(self.path_cut+'\\'+file, compare_dir)
-
-        self.move_clips()
         
 
 
     def move_clips(self):
         for files in os.listdir(self.path_cut):
             for videos in self.results:
-                teste = videos.replace(f'{self.path_cut}', '')
-                if(files == teste):
-                    print('OK!!')
+                if(files == str(videos.replace(f'{self.path_cut}'+'\\', ''))):
                     shutil.move(videos, f'C:/Users/{os.getlogin()}/Videos')
