@@ -21,10 +21,14 @@ class App:
 
         def start():
             self.video.get_faces_on_video()
+            
+        path = ['teste','oii'] #self.video.results
 
 
         # Use CTkButton instead of tkinter Button
+        text1 = customtkinter.CTkLabel(app, text=path)
+        text1.place(relx=0.5, rely=0.75, anchor=customtkinter.CENTER)
         button1 = customtkinter.CTkButton(master=app, text="Start", command=start)
-        button1.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
+        button1.place(relx=0.5, rely=0.4, anchor=customtkinter.CENTER)
 
         app.mainloop()

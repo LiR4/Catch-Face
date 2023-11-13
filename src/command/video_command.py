@@ -6,6 +6,7 @@ import numpy as np
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from deepface import DeepFace
 import os
+import shutil
 
 class VideoCommand:
     def __init__(self, config:ConfigHandler, app:AppCommand):
@@ -14,7 +15,6 @@ class VideoCommand:
         self.app = app
         self.results = []
         self.last_time = []
-        self.results = []
         self.time_start = 0.0
         self.time_end = 0.0
         self.count = 0
@@ -68,6 +68,7 @@ class VideoCommand:
                     cv2.imwrite('./shared/data/test/teste.jpg', frames)
                     dfs = DeepFace.find(img_path = './shared/data/test/teste.jpg', db_path = compare, enforce_detection=False)
                     if(len(dfs[0])!=0):
+                        print("-------------- OK!!! --------------")
                         self.results.append(file)
                         break
                 else:
@@ -79,4 +80,14 @@ class VideoCommand:
             print("--------\n",self.path_cut+'\\'+file,"\n--------")
             self.catch_face(self.path_cut+'\\'+file, compare_dir)
 
-        return self.results
+        self.move_clips()
+        
+
+
+    def move_clips(self):
+        for files in os.listdir(self.path_cut):
+            for videos in self.results:
+                teste = videos.replace(f'{self.path_cut}', '')
+                if(files == teste):
+                    print('OK!!')
+                    shutil.move(videos, f'C:/Users/{os.getlogin()}/Videos')
