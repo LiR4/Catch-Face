@@ -17,18 +17,18 @@ Com está sem o executável vamos iniciar da maneira tradicional.
 
 - Primeiro vamos clonar o repositório.
 
-  ```
+  ```Shell
   git clone https://github.com/LiR4/Catch-Face.git
   ```
 
 - Entre na pasta do projeto e use o comando.
 
-  ```python
+  ```Shell
   pip install -r requirements.txt
   ```
 
 - Agora use esse comando para modular o projeto.
-  ```python
+  ```Shell
   pip install -e
   ```
 
@@ -187,4 +187,38 @@ def clips_have_face(self):
     for file in os.listdir(self.path_cut):
         print("--------\n",self.path_cut+'\\'+file,"\n--------")
         self.catch_face(self.path_cut+'\\'+file, compare_dir)      
+```
+
+### catch_face 
+Tem como objetivo principal identificar se o rosto é correspondente se baseando na pasta selecionada ou passada como parâmetro para a função.
+
+* Ele necessita do video selecionado e a pasta para iniciar.
+
+Ao iniciar utiliza da comparação de frame a frame com as imagens presentes na pasta.
+
+```Python
+def catch_face(self, file, compare):
+    video = cv2.VideoCapture(file)
+    if(video.isOpened):
+        while True:
+            state, frames = video.read()
+            if(state):
+                cv2.imwrite('./shared/data/test/teste.jpg', frames)
+                dfs = DeepFace.find(img_path = './shared/data/test/teste.jpg', db_path = compare, enforce_detection=False)
+                if(len(dfs[0])!=0):
+                    self.results.append(file)
+                    break
+            else:
+                break
+```
+### move_clips
+
+Sua função é mover clips que foi encontrado a pessoa no vídeo para a pasta padrão ***Videos*** do Windows.
+
+```Python
+def move_clips(self):
+    for files in os.listdir(self.path_cut):
+        for videos in self.results:
+            if(files == str(videos.replace(f'{self.path_cut}'+'\\', ''))):
+                shutil.move(videos, f'C:/Users/{os.getlogin()}/Videos')
 ```
